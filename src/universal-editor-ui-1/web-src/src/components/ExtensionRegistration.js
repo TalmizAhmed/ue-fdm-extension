@@ -23,7 +23,7 @@ function ExtensionRegistration() {
                             return [
                                 {
                                     id: "forms.datatree.panel",
-                                    header: "FDM Data Tree",
+                                    header: "Data Sources",
                                     url: '/#/tree',
                                     icon: 'FileData'
                                 },
