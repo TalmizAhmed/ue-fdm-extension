@@ -66,7 +66,7 @@ class FDMTransformer {
         };
     
         children.forEach(child => {
-            Object.assign(componentObj[label], this.buildNestedComponentStructure(child));
+            Object.assign(componentObj[fieldType], this.buildNestedComponentStructure(child));
         });
         
         return componentObj;
@@ -112,6 +112,57 @@ class FDMTransformer {
         }
     }
 
+    /*
+        Standard Pattern given by all implementations for:
+        {
+            id:,
+            name:,
+            properties: {},
+            children: []
+        }
+
+     */
+    standardize = (data) => {
+        const generateId = (title) => {
+            const randomNum = Math.floor(Math.random() * 1e10).toString().padStart(10, '0');
+            return `${title.split(' ').join('')}${randomNum}`;
+        };
+        
+        const mapProperties = (properties) => {
+            if(!properties || properties.length === 0) {
+                return []
+            }
+            return Object.keys(properties).map((key) => {
+                const prop = properties[key];
+                // const nonNestedProps = {};
+                // Object.keys(prop).forEach((k) => {
+                //     if (typeof otherProps[k] !== 'object') {
+                //         nonNestedProps[k] = prop[k];
+                //     }
+                // });
+                return {
+                    id: generateId(prop.title),
+                    name: prop.title,
+                    properties: {
+                        datapath: prop.datapath,
+                        type: prop.type || null
+                    },
+                    children: prop.properties ? mapProperties(prop.properties) : []
+                };
+            });
+        };
+        
+        return {
+            id: generateId(data.title),
+            name: data.title,
+            properties: {
+                datapath: data.datapath || null,
+                type: data.type || null
+            },
+            children: data.properties ? mapProperties(data.properties) : []
+        };
+    }
+
 }
 
 const FormatRegistry = {
@@ -125,10 +176,16 @@ const FormatRegistry = {
 class UniversalEditor {
     constructor () {
         this.transformer = null;
+        this.content = {}
     }
 
     setTransformer(schemaType) {
         this.transformer = FormatRegistry.universalEditor[schemaType];
+    }
+
+    standardize(data) {
+        this.content = this.transformer.standardize(data);
+        return this.content;
     }
 
     transform(data) {
