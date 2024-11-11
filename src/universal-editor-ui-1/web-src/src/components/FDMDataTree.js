@@ -10,6 +10,7 @@ import {Content} from '@react-spectrum/view';
 import {IllustratedMessage} from '@react-spectrum/illustratedmessage';
 import NotFound from '@spectrum-icons/illustrations/NotFound';
 import {Heading} from '@react-spectrum/text';
+import ue from './Transformer';
 function DataTree () {
 
     const [loading, setLoading] = useState(true);
@@ -214,7 +215,7 @@ function DataTree () {
               id: property.datapath,
               label: key,
               type: property.type || 'panel',
-              children: property.properties ? mapProperties(property.properties) : undefined,
+              children: property.properties ? mapProperties(property.properties) : [],
             };
             return item;
           });
@@ -275,9 +276,11 @@ function DataTree () {
                     setLoading(false);
                 }
                 setFDMTree(actionResponse);
+                const newItems = ue.transform(actionResponse);
+                console.log("New items: ", newItems)
                 const items = mapToItems(actionResponse)
                 setItems(items)
-                console.log(items)
+                console.log("Old items: ",items)
             } finally {
                 setLoading(false);
             }
