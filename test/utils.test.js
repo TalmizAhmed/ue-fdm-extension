@@ -6,7 +6,7 @@ accordance with the terms of the Adobe license agreement accompanying
 it.
 */
 
-const utils = require('./../src/universal-editor-ui-1/actions/utils.js')
+const utils = require('./../src/ue-fdm-extension/actions/utils.js')
 
 test('interface', () => {
   expect(typeof utils.errorResponse).toBe('function')
