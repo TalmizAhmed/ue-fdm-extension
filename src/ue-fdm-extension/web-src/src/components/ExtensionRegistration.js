@@ -24,7 +24,7 @@ function ExtensionRegistration() {
                                 {
                                     id: "forms.datatree.panel",
                                     header: "Data Sources",
-                                    url: '/#/tree',
+                                    url: '/#/fds',
                                     icon: 'FileData'
                                 },
                             ];

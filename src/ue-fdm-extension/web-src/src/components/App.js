@@ -24,7 +24,7 @@ function App() {
                         element={<ExtensionRegistration />}
                     />
                     <Route
-                        exact path="tree"
+                        exact path="fds"
                         element={<FDMDataTree />}
                     />
                 </Routes>
